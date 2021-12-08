@@ -20,12 +20,9 @@ jobs:
         uses: actions/setup-node@v2
         with:
           node-version: ${{ matrix.node-version }}
-          cache: 'npm'
       - name: npm innstall
         run: |
           make install
-        env:
-          CI: true
       - name: run linter
         run: |
           make lint
