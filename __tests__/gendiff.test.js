@@ -1,4 +1,4 @@
-import * as fs from 'fs';
+import { fs } from 'fs';
 import { fileURLToPath } from 'url';
 import path, { dirname } from 'path';
 import { test, expect, beforeAll } from '@jest/globals';
