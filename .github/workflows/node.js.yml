@@ -23,10 +23,10 @@ jobs:
           cache: 'npm'
       - name: npm innstall
         run: |
-        make install
+          make install
       - name: run linter
         run: |
-        make lint
+          make lint
       - name: test & publish code coverage
         uses: paambaati/codeclimate-action@v2.7.4
         env:
