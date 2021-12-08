@@ -18,6 +18,7 @@
   "bugs": {
     "url": "https://github.com/gedo19/backend-project-lvl2/issues"
   },
+  "type": "module",
   "homepage": "https://github.com/gedo19/backend-project-lvl2#readme",
   "bin": {
     "gendiff": "bin/gendiff.js"
