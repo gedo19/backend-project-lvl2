@@ -7,7 +7,7 @@ const parse = (data, format) => {
   } else if (format === '.yaml') {
     parseData = yaml.load;
   } else {
-    throw new Error('This file format not supported.')
+    throw new Error('This file format not supported.');
   }
   return parseData(data);
 };

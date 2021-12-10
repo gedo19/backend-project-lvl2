@@ -17,21 +17,20 @@ let parsedPlainData;
 beforeAll(() => {
   plain = readFile('plain.txt');
   parsedPlainData = {
-    "host": "hexlet.io",
-    "timeout": 50,
-    "proxy": "123.234.53.22",
-    "follow": false
+    host: 'hexlet.io',
+    timeout: 50,
+    proxy: '123.234.53.22',
+    follow: false,
   };
 });
 
 test('plain json shoud work', () => {
-  const expected = getDiff(getFixturePath('file1.json'), getFixturePath('file2.json'))
+  const expected = getDiff(getFixturePath('file1.json'), getFixturePath('file2.json'));
   expect(expected).toEqual(plain);
 });
 
-
 test('plain yaml shoud work', () => {
-  const expected = getDiff(getFixturePath('file1.yaml'), getFixturePath('file2.yaml'))
+  const expected = getDiff(getFixturePath('file1.yaml'), getFixturePath('file2.yaml'));
   expect(expected).toEqual(plain);
 });
 
