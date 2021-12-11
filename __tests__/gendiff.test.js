@@ -11,12 +11,12 @@ const __dirname = dirname(__filename);
 const getFixturePath = (filename) => path.join(__dirname, '..', '__fixtures__', filename);
 const readFile = (filename) => fs.readFileSync(getFixturePath(filename), 'utf-8');
 
-let plain;
-let parsedPlainData;
+let nested;
+let parsedData;
 
 beforeAll(() => {
-  plain = readFile('plain.txt');
-  parsedPlainData = {
+  nested = readFile('nested_result.txt');
+  parsedData = {
     host: 'hexlet.io',
     timeout: 50,
     proxy: '123.234.53.22',
@@ -24,24 +24,24 @@ beforeAll(() => {
   };
 });
 
-test('plain json shoud work', () => {
-  const expected = getDiff(getFixturePath('file1.json'), getFixturePath('file2.json'));
-  expect(expected).toEqual(plain);
+test('nested json shoud work', () => {
+  const expected = getDiff(getFixturePath('nested1.json'), getFixturePath('nested2.json'));
+  expect(expected).toEqual(nested);
 });
 
-test('plain yaml shoud work', () => {
-  const expected = getDiff(getFixturePath('file1.yaml'), getFixturePath('file2.yaml'));
-  expect(expected).toEqual(plain);
+test('nested yaml shoud work', () => {
+  const expected = getDiff(getFixturePath('nested1.yaml'), getFixturePath('nested2.yaml'));
+  expect(expected).toEqual(nested);
 });
 
 test('parser shour parse json files format', () => {
-  const expected = parse(readFile('file1.json'), '.json');
-  expect(expected).toEqual(parsedPlainData);
+  const expected = parse(readFile('plain1.json'), '.json');
+  expect(expected).toEqual(parsedData);
 });
 
 test('parser shour parse yaml files format', () => {
-  const expected = parse(readFile('file1.yaml'), '.yaml');
-  expect(expected).toEqual(parsedPlainData);
+  const expected = parse(readFile('plain1.yaml'), '.yaml');
+  expect(expected).toEqual(parsedData);
 });
 
 test('parser shour throw error when recieve not supported file format', () => {
