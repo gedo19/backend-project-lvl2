@@ -1,28 +1,30 @@
 import _ from 'lodash';
+import { mkProperty, mkNestedProperty } from './diffTreeIntefaces.js';
 
 const compareObjects = (data1, data2) => {
   const keys = _.union(Object.keys(data1), Object.keys(data2));
   const sortedKeys = _.sortBy(keys);
 
-  const difference = sortedKeys.reduce((diff, key) => {
-    if (!_.has(data1, key)) {
-      const value = data2[key];
-      return `${diff}  + ${key}: ${value}\n`;
-    }
-    if (!_.has(data2, key)) {
-      const value = data1[key];
-      return `${diff}  - ${key}: ${value}\n`;
-    }
-
+  const tree = sortedKeys.map((key) => {
     const value1 = data1[key];
     const value2 = data2[key];
 
-    return value1 === value2
-      ? `${diff}    ${key}: ${value2}\n`
-      : `${diff}  - ${key}: ${value1}\n  + ${key}: ${value2}\n`;
-  }, '');
+    if (_.isObject(value1) && _.isObject(value2)) {
+      const children = compareObjects(value1, value2);
+      return mkNestedProperty(key, children);
+    }
+    if (!_.has(data1, key)) {
+      return mkProperty(key, value2, 'added');
+    }
+    if (!_.has(data2, key)) {
+      return mkProperty(key, value1, 'deleted');
+    }
+    if (value1 !== value2) {
+      return mkProperty(key, value2, 'changed', { oldValue: value1 });
+    }
 
-  return `{\n${difference}}`;
+    return mkProperty(key, value2);
+  });
+  return tree;
 };
-
 export default compareObjects;
