@@ -9,14 +9,8 @@ const __dirname = dirname(__filename);
 
 const getFixturePath = (filename) => path.join(__dirname, '..', '__fixtures__', filename);
 const readFile = (filename) => fs.readFileSync(getFixturePath(filename), 'utf-8');
-
-let nestedStylishFormat;
-let nestedPlainFormat;
-
-beforeAll(() => {
-  const data = readFile('nested_result.txt');
-  [nestedStylishFormat, nestedPlainFormat] = data.trim().split('\n\n\n');
-});
+const data = readFile('nested_result.txt');
+const [nestedStylishFormat, nestedPlainFormat] = data.trim().split('\n\n\n');
 
 test('nested stylish-formatter json shoud work', () => {
   const expected = getDiff(getFixturePath('nested1.json'), getFixturePath('nested2.json'), 'stylish');
