@@ -12,22 +12,22 @@ const readFile = (filename) => fs.readFileSync(getFixturePath(filename), 'utf-8'
 const data = readFile('nested_result.txt');
 const [nestedStylishFormat, nestedPlainFormat] = data.trim().split('\n\n\n');
 
-test('nested stylish-formatter json shoud work', () => {
+test('nested stylish-formatter json should work', () => {
   const expected = getDiff(getFixturePath('nested1.json'), getFixturePath('nested2.json'), 'stylish');
   expect(expected).toEqual(nestedStylishFormat);
 });
 
-test('nested stylish-formatter yaml shoud work', () => {
+test('nested stylish-formatter yaml should work', () => {
   const expected = getDiff(getFixturePath('nested1.yaml'), getFixturePath('nested2.yaml'), 'stylish');
   expect(expected).toEqual(nestedStylishFormat);
 });
 
-test('nested plain-formatter json shoud work', () => {
+test('nested plain-formatter json should work', () => {
   const expected = getDiff(getFixturePath('nested1.json'), getFixturePath('nested2.json'), 'plain');
   expect(expected).toEqual(nestedPlainFormat);
 });
 
-test('nested plain-formatter yaml shoud work', () => {
+test('nested plain-formatter yaml should work', () => {
   const expected = getDiff(getFixturePath('nested1.yaml'), getFixturePath('nested2.yaml'), 'plain');
   expect(expected).toEqual(nestedPlainFormat);
 });

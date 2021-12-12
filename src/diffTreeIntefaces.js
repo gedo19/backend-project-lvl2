@@ -11,7 +11,7 @@ const mkNestedProperty = (key, value = [], status = 'unchanged') => ({
 const mkProperty = (key, value, status = 'unchanged', meta = {}) => ({
   key,
   value,
-  type: 'propetry',
+  type: 'property',
   status,
   meta,
 });
