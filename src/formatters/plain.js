@@ -11,11 +11,11 @@ const normalize = (value) => {
     return `'${value}'`;
   }
   if (value === '') {
-    return `''`;
+    return '\'\'';
   }
 
   return value;
-}
+};
 
 const plain = (differenceTree) => {
   const iter = (properties, line) => {
@@ -26,26 +26,28 @@ const plain = (differenceTree) => {
         const status = getStatus(property);
         if (!isNestedProperty(property)) {
           const normalizedValue = normalize(value);
+
           switch (status) {
             case 'added':
               return `${line}${key}' was added with value: ${normalizedValue}`;
             case 'deleted':
               return `${line}${key}' was removed`;
-            case 'changed':
+            case 'changed': {
               const oldValue = getOldValue(property);
               const normalizedOldValue = normalize(oldValue);
               return `${line}${key}' was updated. From ${normalizedOldValue} to ${normalizedValue}`;
+            }
             default:
               return '';
           }
-        };
+        }
 
         return iter(value, `${line}${key}.`);
       });
-      return lines.filter((e) => e).join('\n');
-  }
+    return lines.filter((e) => e).join('\n');
+  };
 
-  return iter(differenceTree, `Property '`)
-}
+  return iter(differenceTree, 'Property \'');
+};
 
 export default plain;
