@@ -3,7 +3,6 @@ import { fileURLToPath } from 'url';
 import path, { dirname } from 'path';
 import { test, expect, beforeAll } from '@jest/globals';
 import getDiff from '../src/index.js';
-import parse from '../src/parsers.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -13,7 +12,6 @@ const readFile = (filename) => fs.readFileSync(getFixturePath(filename), 'utf-8'
 
 let nestedStylishFormat;
 let nestedPlainFormat;
-
 
 beforeAll(() => {
   const data = readFile('nested_result.txt');
