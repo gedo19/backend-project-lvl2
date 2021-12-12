@@ -11,7 +11,7 @@ export default (filepath1, filepath2, formatterName = 'stylish') => {
   const format2 = path.extname(filepath2);
   const object1 = parse(data1, format1);
   const object2 = parse(data2, format2);
-  
+
   const formatter = getFormatter(formatterName);
   return formatter(compareObjects(object1, object2));
 };
