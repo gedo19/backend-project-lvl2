@@ -19,7 +19,7 @@ const compareObjects = (data1, data2) => {
     if (!_.has(data2, key)) {
       return mkProperty(key, value1, 'deleted');
     }
-    if (value1 !== value2) {
+    if (!_.isEqual(value1, value2)) {
       return mkProperty(key, value2, 'changed', { oldValue: value1 });
     }
 
