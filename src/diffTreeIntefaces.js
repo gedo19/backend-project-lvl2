@@ -25,7 +25,7 @@ const getValue = (property) => property.value;
 const getMeta = (property) => property.meta;
 const getStatus = (property) => property.status;
 const getOldValue = (property) => getMeta(property).oldValue;
-const isNestedProperty = (property) => property.type === 'nestedProperty';
+const isFlatProperty = (property) => property.type === 'property';
 
 export {
   mkProperty,
@@ -33,7 +33,7 @@ export {
   getKey,
   getValue,
   getMeta,
-  isNestedProperty,
+  isFlatProperty,
   getStatus,
   getOldValue,
 };

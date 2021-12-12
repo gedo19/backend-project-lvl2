@@ -1,6 +1,6 @@
 import _ from 'lodash';
 import {
-  getKey, getValue, isNestedProperty, getStatus, getOldValue,
+  getKey, getValue, isFlatProperty, getStatus, getOldValue,
 } from '../diffTreeIntefaces.js';
 
 const normalize = (value) => {
@@ -19,22 +19,19 @@ const normalize = (value) => {
 
 const plain = (differenceTree) => {
   const iter = (properties, line) => {
-    const lines = properties
-      .flatMap((property) => {
+    const lines = properties.flatMap((property) => {
         const key = getKey(property);
         const value = getValue(property);
         const status = getStatus(property);
-        if (!isNestedProperty(property)) {
+        if (isFlatProperty(property)) {
           const normalizedValue = normalize(value);
-
           switch (status) {
             case 'added':
               return `${line}${key}' was added with value: ${normalizedValue}`;
             case 'deleted':
               return `${line}${key}' was removed`;
             case 'changed': {
-              const oldValue = getOldValue(property);
-              const normalizedOldValue = normalize(oldValue);
+              const normalizedOldValue = normalize(getOldValue(property));
               return `${line}${key}' was updated. From ${normalizedOldValue} to ${normalizedValue}`;
             }
             default:

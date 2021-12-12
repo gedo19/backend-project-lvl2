@@ -1,6 +1,6 @@
 import _ from 'lodash';
 import {
-  getKey, getValue, isNestedProperty, getStatus, getOldValue,
+  getKey, getValue, isFlatProperty, getStatus, getOldValue,
 } from '../diffTreeIntefaces.js';
 
 const makeIdent = (size, status) => {
@@ -52,7 +52,7 @@ const stylish = (differenceTree) => {
       const value = getValue(property);
       const status = getStatus(property);
       const currentIdent = makeIdent(identSize, status);
-      if (!isNestedProperty(property)) {
+      if (isFlatProperty(property)) {
         const valueString = _.isObject(value) ? stringify(value, replacer, identSize) : value;
         if (status === 'changed') {
           const [minusIdent, plusIdent] = currentIdent;
