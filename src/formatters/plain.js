@@ -14,29 +14,29 @@ const normalize = (value) => {
 const plain = (differenceTree) => {
   const iter = (properties, path) => {
     const lines = properties
-    .map((property) => {
-      const keys = [...path, getKey(property)];
-      const value = getValue(property);
-      const status = getStatus(property);
-      if (isFlatProperty(property)) {
-        const propertyName = keys.join('.')
-        const normalizedValue = normalize(value);
-        switch (status) {
-          case 'added':
-            return `Property '${propertyName}' was added with value: ${normalizedValue}`;
-          case 'deleted':
-            return `Property '${propertyName}' was removed`;
-          case 'changed': {
-            const normalizedOldValue = normalize(getOldValue(property));
-            return `Property '${propertyName}' was updated. From ${normalizedOldValue} to ${normalizedValue}`;
+      .map((property) => {
+        const keys = [...path, getKey(property)];
+        const value = getValue(property);
+        const status = getStatus(property);
+        if (isFlatProperty(property)) {
+          const propertyName = keys.join('.');
+          const normalizedValue = normalize(value);
+          switch (status) {
+            case 'added':
+              return `Property '${propertyName}' was added with value: ${normalizedValue}`;
+            case 'deleted':
+              return `Property '${propertyName}' was removed`;
+            case 'changed': {
+              const normalizedOldValue = normalize(getOldValue(property));
+              return `Property '${propertyName}' was updated. From ${normalizedOldValue} to ${normalizedValue}`;
+            }
+            default:
+              return '';
           }
-          default:
-            return '';
         }
-      }
 
-      return iter(value, keys);
-    });
+        return iter(value, keys);
+      });
     return lines.filter((e) => e).join('\n');
   };
 
