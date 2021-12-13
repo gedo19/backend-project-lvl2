@@ -30,10 +30,7 @@ const plain = (differenceTree) => {
         }
         return iter(children, keys);
       });
-
-    return lines
-      .filter((e) => e) // removing empty elements
-      .join('\n');
+    return lines.filter((e) => e).join('\n'); // filtering empty elements and join rest
   };
 
   return iter(differenceTree, []);
