@@ -28,7 +28,6 @@ const plain = (differenceTree) => {
               return '';
           }
         }
-
         return iter(children, keys);
       });
 

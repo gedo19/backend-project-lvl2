@@ -16,11 +16,7 @@ const stringify = (value, depth) => {
       .entries(currentValue)
       .map(([key, val]) => `${currentIndent}${key}: ${iter(val, currentDepth + 1)}`);
 
-    return [
-      '{',
-      ...lines,
-      `${bracketIndent}}`,
-    ].join('\n');
+    return ['{', ...lines, `${bracketIndent}}`].join('\n');
   };
 
   return iter(value, depth + 1);
@@ -50,15 +46,10 @@ export default (differenceTree) => {
               return `${mkIdent(identSize)}${key}: ${stringifyValue}`;
           }
         }
-
         return `${mkIdent(identSize)}${key}: ${iter(children, depth + 1)}`;
       });
 
-    return [
-      '{',
-      ...lines,
-      `${bracketIdent}}`,
-    ].join('\n');
+    return ['{', ...lines, `${bracketIdent}}`].join('\n');
   };
 
   return iter(differenceTree, 1);
