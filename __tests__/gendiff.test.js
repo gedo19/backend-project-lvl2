@@ -13,12 +13,12 @@ const data = readFile('nested_result.txt');
 const [nestedStylishFormat, nestedPlainFormat] = data.trim().split('\n\n\n');
 
 test('nested stylish-formatter json should work', () => {
-  const expected = getDiff(getFixturePath('nested1.json'), getFixturePath('nested2.json'), 'stylish');
+  const expected = getDiff(getFixturePath('nested1.json'), getFixturePath('nested2.json'));
   expect(expected).toEqual(nestedStylishFormat);
 });
 
 test('nested stylish-formatter yaml should work', () => {
-  const expected = getDiff(getFixturePath('nested1.yaml'), getFixturePath('nested2.yaml'), 'stylish');
+  const expected = getDiff(getFixturePath('nested1.yaml'), getFixturePath('nested2.yaml'));
   expect(expected).toEqual(nestedStylishFormat);
 });
 
