@@ -1,7 +1,4 @@
 import _ from 'lodash';
-import {
-  getKey, getValue, isFlatProperty, getStatus, getOldValue,
-} from '../diffTreeIntefaces.js';
 
 const normalize = (value) => {
   if (_.isObject(value)) {
@@ -14,30 +11,30 @@ const normalize = (value) => {
 const plain = (differenceTree) => {
   const iter = (properties, path) => {
     const lines = properties
-      .map((property) => {
-        const keys = [...path, getKey(property)];
-        const value = getValue(property);
-        const status = getStatus(property);
-        if (isFlatProperty(property)) {
+      .map(({
+        key, value, type, children, oldValue,
+      }) => {
+        const keys = [...path, key];
+        if (type !== 'hasChildren') {
           const propertyName = keys.join('.');
-          const normalizedValue = normalize(value);
-          switch (status) {
+          switch (type) {
             case 'added':
-              return `Property '${propertyName}' was added with value: ${normalizedValue}`;
+              return `Property '${propertyName}' was added with value: ${normalize(value)}`;
             case 'deleted':
               return `Property '${propertyName}' was removed`;
-            case 'changed': {
-              const normalizedOldValue = normalize(getOldValue(property));
-              return `Property '${propertyName}' was updated. From ${normalizedOldValue} to ${normalizedValue}`;
-            }
+            case 'changed':
+              return `Property '${propertyName}' was updated. From ${normalize(oldValue)} to ${normalize(value)}`;
             default:
               return '';
           }
         }
 
-        return iter(value, keys);
+        return iter(children, keys);
       });
-    return lines.filter((e) => e).join('\n');
+
+    return lines
+      .filter((e) => e) // removing empty elements
+      .join('\n');
   };
 
   return iter(differenceTree, []);

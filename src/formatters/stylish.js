@@ -1,34 +1,20 @@
 import _ from 'lodash';
-import {
-  getKey, getValue, isFlatProperty, getStatus, getOldValue,
-} from '../diffTreeIntefaces.js';
 
-const makeIdent = (size, status) => {
-  const identStart = ' '.repeat(size - 2);
-  switch (status) {
-    case 'added':
-      return `${identStart}+ `;
-    case 'deleted':
-      return `${identStart}- `;
-    case 'changed':
-      return [`${identStart}- `, `${identStart}+ `];
-    default:
-      return `${identStart}  `;
-  }
-};
+const spacesCount = 4; // count of spacing symbol in first-level ident
+const mkIdent = (identSize, action = '', replacer = ' ') => action.padStart(identSize, replacer);
 
-const stringify = (value, replacer, spacesCount) => {
-  const iter = (currentValue, depth) => {
-    if (typeof currentValue !== 'object') {
+const stringify = (value, depth) => {
+  const iter = (currentValue, currentDepth) => {
+    if (!_.isObject(currentValue)) {
       return currentValue.toString();
     }
 
-    const indentSize = depth * spacesCount;
-    const currentIndent = replacer.repeat(indentSize);
-    const bracketIndent = replacer.repeat(indentSize);
+    const indentSize = spacesCount * currentDepth;
+    const currentIndent = mkIdent(indentSize);
+    const bracketIndent = mkIdent(indentSize - spacesCount); // bracket ident always one step back
     const lines = Object
       .entries(currentValue)
-      .map(([key, val]) => `${currentIndent}    ${key}: ${iter(val, depth + 1)}`);
+      .map(([key, val]) => `${currentIndent}${key}: ${iter(val, currentDepth + 1)}`);
 
     return [
       '{',
@@ -37,35 +23,36 @@ const stringify = (value, replacer, spacesCount) => {
     ].join('\n');
   };
 
-  return iter(value, 1);
+  return iter(value, depth + 1);
 };
 
-const stylish = (differenceTree) => {
-  const spacesCount = 4;
-  const replacer = ' ';
-  const iter = (tree, depth) => {
-    const identSize = depth * spacesCount;
-    const bracketIdent = replacer.repeat(identSize - spacesCount);
-
-    const lines = tree.map((property) => {
-      const key = getKey(property);
-      const value = getValue(property);
-      const status = getStatus(property);
-      const currentIdent = makeIdent(identSize, status);
-      if (isFlatProperty(property)) {
-        const valueString = _.isObject(value) ? stringify(value, replacer, identSize) : value;
-        if (status === 'changed') {
-          const [minusIdent, plusIdent] = currentIdent;
-          const oldValue = getOldValue(property);
-          const oldValueString = _.isObject(oldValue)
-            ? stringify(oldValue, replacer, identSize)
+export default (differenceTree) => {
+  const iter = (properties, depth) => {
+    const identSize = spacesCount * depth;
+    const bracketIdent = mkIdent(identSize - spacesCount); // bracket ident always one step back
+    const lines = properties
+      .map(({
+        key, value, type, children, oldValue,
+      }) => {
+        if (type !== 'hasChildren') {
+          const stringifyValue = _.isObject(value) ? stringify(value, depth) : value;
+          const stringifyOldValue = _.isObject(oldValue)
+            ? stringify(oldValue, depth)
             : oldValue;
-          return `${minusIdent}${key}: ${oldValueString}\n${plusIdent}${key}: ${valueString}`;
+          switch (type) {
+            case 'added':
+              return `${mkIdent(identSize, '+ ')}${key}: ${stringifyValue}`;
+            case 'deleted':
+              return `${mkIdent(identSize, '- ')}${key}: ${stringifyValue}`;
+            case 'changed':
+              return `${mkIdent(identSize, '- ')}${key}: ${stringifyOldValue}\n${mkIdent(identSize, '+ ')}${key}: ${stringifyValue}`;
+            default:
+              return `${mkIdent(identSize)}${key}: ${stringifyValue}`;
+          }
         }
-        return `${currentIdent}${key}: ${valueString}`;
-      }
-      return `${currentIdent}${key}: ${iter(value, depth + 1)}`;
-    });
+
+        return `${mkIdent(identSize)}${key}: ${iter(children, depth + 1)}`;
+      });
 
     return [
       '{',
@@ -76,5 +63,3 @@ const stylish = (differenceTree) => {
 
   return iter(differenceTree, 1);
 };
-
-export default stylish;

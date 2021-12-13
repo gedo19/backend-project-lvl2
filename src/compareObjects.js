@@ -1,29 +1,30 @@
 import _ from 'lodash';
-import { mkProperty, mkNestedProperty } from './diffTreeIntefaces.js';
 
-const compareObjects = (data1, data2) => {
-  const keys = _.union(Object.keys(data1), Object.keys(data2));
-  const sortedKeys = _.sortBy(keys);
+const compareObjects = (firstData, secondData) => {
+  const keys = _.union(Object.keys(firstData), Object.keys(secondData));
 
-  return sortedKeys.map((key) => {
-    const value1 = data1[key];
-    const value2 = data2[key];
+  return _.sortBy(keys)
+    .map((key) => {
+      const firstValue = firstData[key];
+      const secondValue = secondData[key];
 
-    if (_.isObject(value1) && _.isObject(value2)) {
-      const children = compareObjects(value1, value2);
-      return mkNestedProperty(key, children);
-    }
-    if (!_.has(data1, key)) {
-      return mkProperty(key, value2, 'added');
-    }
-    if (!_.has(data2, key)) {
-      return mkProperty(key, value1, 'deleted');
-    }
-    if (!_.isEqual(value1, value2)) {
-      return mkProperty(key, value2, 'changed', { oldValue: value1 });
-    }
+      if (_.isObject(firstValue) && _.isObject(secondValue)) {
+        const children = compareObjects(firstValue, secondValue);
+        return { key, type: 'hasChildren', children };
+      }
+      if (!_.has(firstData, key)) {
+        return { key, value: secondValue, type: 'added' };
+      }
+      if (!_.has(secondData, key)) {
+        return { key, value: firstValue, type: 'deleted' };
+      }
+      if (!_.isEqual(firstValue, secondValue)) {
+        return {
+          key, value: secondValue, type: 'changed', oldValue: firstValue,
+        };
+      }
 
-    return mkProperty(key, value2);
-  });
+      return { key, value: secondValue, type: 'unchanged' };
+    });
 };
 export default compareObjects;
