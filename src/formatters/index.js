@@ -8,7 +8,7 @@ export default (formatterName) => {
     case 'plain':
       return plain;
     case 'json':
-      return JSON.parse;
+      return JSON.stringify;
     default:
       throw new Error(`Wrong formatter name: ${formatterName}`);
   }
