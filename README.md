@@ -29,7 +29,8 @@ node v14+
 `gendiff -h for help`
 #### As package
 ```javascript
-
+import genDiff from '@hexlet/code';
+gendiff(filepath1, filepath2, [formatName]);
 ```
 
 ## Prewiev
