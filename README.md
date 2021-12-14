@@ -12,6 +12,7 @@
 
 ## Desctiption
 A console utility that calculates the differences between json and yaml files.
+The packege provides export gendiff function.
 
 ## Requirements
 node v14+
@@ -23,13 +24,18 @@ node v14+
 4. `npm link`
 
 ## Usage
-
-`gendiff -h` for help
+#### As a console utility:
+`gendiff -h for help`
+#### As package
+```javascript
+import genDiff from '@hexlet/code';
+gendiff(filepath1, filepath2, [formatName]);
+```
 
 ## Prewiev
 ### Plain json and yaml files
 #### before.json
-```
+```js
 {
   "host": "hexlet.io",
   "timeout": 50,
@@ -38,7 +44,7 @@ node v14+
 }
 ```
 #### after.json
-```
+```js
 {
   "timeout": 20,
   "verbose": true,
@@ -49,14 +55,14 @@ node v14+
 [![asciicast](https://asciinema.org/a/455601.svg)](https://asciinema.org/a/455601)
 
 #### before.yaml
-```
+```yaml
 host: hexlet.io
 timeout: 50
 proxy: 123.234.53.22
 follow: false
 ```
 #### after.yaml
-```
+```yaml
 timeout: 20
 verbose: true
 host: hexlet.io
@@ -66,7 +72,7 @@ host: hexlet.io
 
 ### Nested json files
 #### before.json
-```
+```js
 {
   "common": {
     "setting1": "Value 1",
@@ -95,7 +101,7 @@ host: hexlet.io
 }
 ```
 #### after.json
-```
+```js
 {
   "common": {
     "follow": false,
