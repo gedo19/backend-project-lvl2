@@ -12,6 +12,7 @@
 
 ## Desctiption
 A console utility that calculates the differences between json and yaml files.
+
 The packege provides export gendiff function.
 
 ## Requirements
