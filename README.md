@@ -11,9 +11,9 @@
 [![Test Coverage](https://api.codeclimate.com/v1/badges/25b37640f9434b2f4897/test_coverage)](https://codeclimate.com/github/gedo19/backend-project-lvl2/test_coverage)
 
 ## Desctiption
-A console utility that calculates the differences between json and yaml files.
+A console utility that compares two configuration files and shows a difference.
 
-The packege provides export gendiff function.
+Supports only **json** and **yaml** files.
 
 ## Requirements
 node v14+
@@ -25,18 +25,26 @@ node v14+
 4. `npm link`
 
 ## Usage
-#### As a console utility:
-`gendiff -h for help`
-#### As package
-```javascript
-import genDiff from '@hexlet/code';
-gendiff(filepath1, filepath2, [formatName]);
 ```
+Usage: gendiff [options] <filepath1> <filepath2>
+
+Compares two configuration files and shows a difference.
+
+Options:
+  -V, --version        output the version number
+  -f, --format [type]  output format (default: "stylish")
+  -h, --help           display help for command
+ ```
+ 
+ Formatters available so far:
+- stylish (default)
+- plain
+- json
 
 ## Prewiev
-### Plain json and yaml files
+### Works with json and yaml files
 #### before.json
-```js
+```javascript
 {
   "host": "hexlet.io",
   "timeout": 50,
@@ -45,14 +53,14 @@ gendiff(filepath1, filepath2, [formatName]);
 }
 ```
 #### after.json
-```js
+```javascript
 {
   "timeout": 20,
   "verbose": true,
   "host": "hexlet.io"
 }
 ```
-#### JSON diff
+#### json diff
 [![asciicast](https://asciinema.org/a/455601.svg)](https://asciinema.org/a/455601)
 
 #### before.yaml
@@ -71,9 +79,9 @@ host: hexlet.io
 #### yaml diff
 [![asciicast](https://asciinema.org/a/455602.svg)](https://asciinema.org/a/455602)
 
-### Nested json files
+### Formatters
 #### before.json
-```js
+```javascript
 {
   "common": {
     "setting1": "Value 1",
@@ -102,7 +110,7 @@ host: hexlet.io
 }
 ```
 #### after.json
-```js
+```javascript
 {
   "common": {
     "follow": false,
