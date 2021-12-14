@@ -11,15 +11,16 @@ const getFixturePath = (filename) => path.join(__dirname, '..', '__fixtures__', 
 const readFile = (filename) => fs.readFileSync(getFixturePath(filename), 'utf-8');
 
 const data = readFile('result.txt');
-const [stylishResult, plainResult] = data.trim().split('\n\n\n');
+const [stylishResult, plainResult, jsonResult] = data.trim().split('\n\n\n');
 const extensions = [{ extension: 'json' }, { extension: 'yaml' }];
 const formatters = [
   { formatter: 'stylish', expected: stylishResult },
   { formatter: 'plain', expected: plainResult },
+  { formatter: 'json', expected: jsonResult },
 ];
 
 describe.each(extensions)(
-  'Shoud work with $extension files:',
+  'Should work with $extension files:',
   ({ extension }) => {
     test.each(formatters)('$formatter', ({ formatter, expected }) => {
       const actual = getDiff(

@@ -11,6 +11,7 @@ const normalize = (value) => {
 const plain = (differenceTree) => {
   const iter = (properties, path) => {
     const lines = properties
+      .filter(({ type }) => type !== 'unchanged')
       .map(({
         key, value, type, children, oldValue,
       }) => {
@@ -30,7 +31,7 @@ const plain = (differenceTree) => {
         }
         return iter(children, keys);
       });
-    return lines.filter((e) => e).join('\n'); // filtering empty elements and join rest
+    return lines.join('\n');
   };
 
   return iter(differenceTree, []);
