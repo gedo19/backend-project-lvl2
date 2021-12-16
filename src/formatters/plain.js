@@ -34,7 +34,7 @@ const plain = (differenceTree) => {
             return iter(children, keys);
           }
           default:
-            throw new Error(`Recieved wrong type: ${type}`)
+            throw new Error(`Recieved wrong type: ${type}`);
         }
       });
     return lines.join('\n');

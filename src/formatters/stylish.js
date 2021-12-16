@@ -48,7 +48,7 @@ export default (differenceTree) => {
             return `${mkIdent(identSize)}${key}: ${iter(children, depth + 1)}`;
           }
           default:
-            throw new Error(`Recieved wrong type: ${type}`)
+            throw new Error(`Recieved wrong type: ${type}`);
         }
       });
 
