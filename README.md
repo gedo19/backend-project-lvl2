@@ -148,4 +148,4 @@ host: hexlet.io
 #### Plain formatter
 [![asciicast](https://asciinema.org/a/455606.svg)](https://asciinema.org/a/455606)
 #### JSON formatter
-[![asciicast](https://asciinema.org/a/455608.svg)](https://asciinema.org/a/455608)
+[![asciicast](https://asciinema.org/a/456631.svg)](https://asciinema.org/a/456631)
