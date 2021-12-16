@@ -23,32 +23,33 @@ export default (differenceTree) => {
     const identSize = spacesCount * depth;
     const bracketIdent = mkIdent(identSize - spacesCount); // bracket ident always one step back
     const lines = properties
-      .map((property) => {
-        const { key } = property;
-        const { type } = property;
-
-        if (type === 'hasChildren') {
-          const { children } = property;
-          return `${mkIdent(identSize)}${key}: ${iter(children, depth + 1)}`;
+      .map((node) => {
+        const { key, type } = node;
+        switch (type) {
+          case 'added': {
+            const value = stringify(node.value, depth + 1);
+            return `${mkIdent(identSize, '+ ')}${key}: ${value}`;
+          }
+          case 'deleted': {
+            const value = stringify(node.value, depth + 1);
+            return `${mkIdent(identSize, '- ')}${key}: ${value}`;
+          }
+          case 'changed': {
+            const valueBefore = stringify(node.valueBefore, depth + 1);
+            const valueAfter = stringify(node.valueAfter, depth + 1);
+            return `${mkIdent(identSize, '- ')}${key}: ${valueBefore}\n${mkIdent(identSize, '+ ')}${key}: ${valueAfter}`;
+          }
+          case 'unchanged': {
+            const value = stringify(node.value, depth + 1);
+            return `${mkIdent(identSize)}${key}: ${value}`;
+          }
+          case 'hasChildren': {
+            const { children } = node;
+            return `${mkIdent(identSize)}${key}: ${iter(children, depth + 1)}`;
+          }
+          default:
+            throw new Error(`Recieved wrong type: ${type}`)
         }
-
-        if (type === 'changed') {
-          const valueBefore = stringify(property.valueBefore, depth + 1);
-          const valueAfter = stringify(property.valueAfter, depth + 1);
-          return `${mkIdent(identSize, '- ')}${key}: ${valueBefore}\n${mkIdent(identSize, '+ ')}${key}: ${valueAfter}`;
-        }
-
-        const value = stringify(property.value, depth + 1);
-
-        if (type === 'added') {
-          return `${mkIdent(identSize, '+ ')}${key}: ${value}`;
-        }
-
-        if (type === 'deleted') {
-          return `${mkIdent(identSize, '- ')}${key}: ${value}`;
-        }
-
-        return `${mkIdent(identSize)}${key}: ${value}`;
       });
 
     return ['{', ...lines, `${bracketIdent}}`].join('\n');

@@ -12,29 +12,30 @@ const plain = (differenceTree) => {
   const iter = (properties, path) => {
     const lines = properties
       .filter(({ type }) => type !== 'unchanged')
-      .map((property) => {
-        const { key } = property;
+      .map((node) => {
+        const { key, type } = node;
         const keys = [...path, key];
-        const { type } = property;
-
-        if (type === 'hasChildren') {
-          const { children } = property;
-          return iter(children, keys);
-        }
-
         const propertyName = keys.join('.');
-
-        if (type === 'changed') {
-          const valueBefore = normalize(property.valueBefore);
-          const valueAfter = normalize(property.valueAfter);
-          return `Property '${propertyName}' was updated. From ${valueBefore} to ${valueAfter}`;
+        switch (type) {
+          case 'added': {
+            const value = normalize(node.value);
+            return `Property '${propertyName}' was added with value: ${value}`;
+          }
+          case 'deleted': {
+            return `Property '${propertyName}' was removed`;
+          }
+          case 'changed': {
+            const valueBefore = normalize(node.valueBefore);
+            const valueAfter = normalize(node.valueAfter);
+            return `Property '${propertyName}' was updated. From ${valueBefore} to ${valueAfter}`;
+          }
+          case 'hasChildren': {
+            const { children } = node;
+            return iter(children, keys);
+          }
+          default:
+            throw new Error(`Recieved wrong type: ${type}`)
         }
-
-        const value = normalize(property.value);
-
-        return type === 'added'
-          ? `Property '${propertyName}' was added with value: ${value}`
-          : `Property '${propertyName}' was removed`;
       });
     return lines.join('\n');
   };
