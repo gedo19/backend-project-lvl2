@@ -41,7 +41,7 @@ Options:
 - plain
 - json
 
-## Prewiev
+## Preview
 ### Works with json and yaml files
 #### before.json
 ```javascript
